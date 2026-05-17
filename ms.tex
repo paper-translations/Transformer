@@ -15,8 +15,25 @@
 % to compile a camera-ready version, add the [final] option, e.g.:
 \usepackage[final]{nips_2017}
 
-\usepackage[utf8]{inputenc} % allow utf-8 input
-\usepackage[T1]{fontenc}    % use 8-bit T1 fonts
+\usepackage{xeCJK}
+\usepackage{setspace}
+\usepackage{caption}
+\usepackage{subcaption}
+
+\setCJKmainfont[
+  BoldFont=/usr/local/share/fonts/founder/FZHei-B01.ttf,
+  ItalicFont=/usr/local/share/fonts/founder/FZKai-Z03.ttf,
+  BoldItalicFont=/usr/local/share/fonts/founder/FZFangSong-Z02.ttf
+]{FZShuSong-Z01}
+\setCJKsansfont[AutoFakeBold=1.2, AutoFakeSlant=0.15]{FZHei-B01}
+\setCJKmonofont[AutoFakeBold=1.2, AutoFakeSlant=0.15]{FZHei-B01}
+\setmainfont{Times New Roman}
+\setsansfont{Helvetica Neue}
+\setmonofont[AutoFakeBold=1.2]{LMMono10}
+
+\setstretch{1.2}
+\captionsetup{font={small,it,stretch=1.2}}
+
 \usepackage{hyperref}       % hyperlinks
 \usepackage{url}            % simple URL typesetting
 \usepackage{booktabs}       % professional-quality tables
