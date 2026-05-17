@@ -1,17 +1,17 @@
-Recurrent neural networks, long short-term memory \citep{hochreiter1997} and gated recurrent \citep{gruEval14} neural networks in particular, have been firmly established as state of the art approaches in sequence modeling and transduction problems such as language modeling and machine translation \citep{sutskever14, bahdanau2014neural, cho2014learning}. Numerous efforts have since continued to push the boundaries of recurrent language models and encoder-decoder architectures \citep{wu2016google,luong2015effective,jozefowicz2016exploring}.
+循环神经网络，特别是长短期记忆 \citep{hochreiter1997} 和门控循环 \citep{gruEval14} 神经网络，已经被确立为序列建模和转导问题（如语言建模和机器翻译）的最先进方法 \citep{sutskever14, bahdanau2014neural, cho2014learning}。随后许多工作继续推进循环语言模型和编码器-解码器架构的发展 \citep{wu2016google,luong2015effective,jozefowicz2016exploring}。
 
-Recurrent models typically factor computation along the symbol positions of the input and output sequences. Aligning the positions to steps in computation time, they generate a sequence of hidden states $h_t$, as a function of the previous hidden state $h_{t-1}$ and the input for position $t$. This inherently sequential nature precludes parallelization within training examples, which becomes critical at longer sequence lengths, as memory constraints limit batching across examples.
+循环模型通常沿输入和输出序列的符号位置进行计算。将位置与计算时间步对齐，它们生成一个隐态序列 $h_t$，作为前一个隐态 $h_{t-1}$ 和位置 $t$ 的输入的函数。这种固有的顺序性质阻止了在训练示例内的并行化，这在较长的序列长度下变得至关重要，因为内存约束限制了示例间的批处理。
 %\marginpar{not sure if the memory constraints are understandable here}
-Recent work has achieved significant improvements in computational efficiency through factorization tricks \citep{Kuchaiev2017Factorization} and conditional computation \citep{shazeer2017outrageously}, while also improving model performance in case of the latter. The fundamental constraint of sequential computation, however, remains.
+最近的工作通过分解技巧 \citep{Kuchaiev2017Factorization} 和条件计算 \citep{shazeer2017outrageously} 在计算效率上取得了显著改进，同时也改进了后者的模型性能。然而，顺序计算的根本约束仍然存在。
 
 %\marginpar{@all: there is work on analyzing what attention really does in seq2seq models, couldn't find it right away} 
 
-Attention mechanisms have become an integral part of compelling sequence modeling and transduction models in various tasks, allowing modeling of dependencies without regard to their distance in the input or output sequences \citep{bahdanau2014neural, structuredAttentionNetworks}. In all but a few cases \citep{decomposableAttnModel}, however, such attention mechanisms are used in conjunction with a recurrent network.
+注意力机制已成为各种任务中令人信服的序列建模和转导模型的重要组成部分，允许在不考虑其在输入或输出序列中的距离的情况下对依赖关系进行建模 \citep{bahdanau2014neural, structuredAttentionNetworks}。然而，除少数情况外 \citep{decomposableAttnModel}，这样的注意力机制都是与循环网络结合使用的。
 
 %\marginpar{not sure if "cross-positional communication" is understandable without explanation}
 %\marginpar{insert exact training times and stats for the model that reaches sota earliest, maybe even a single GPU model?}
 
-In this work we propose the Transformer, a model architecture eschewing recurrence and instead relying entirely on an attention mechanism to draw global dependencies between input and output. The Transformer allows for significantly more parallelization and can reach a new state of the art in translation quality after being trained for as little as twelve hours on eight P100 GPUs. 
+在本工作中，我们提出了 Transformer，一种避免循环而完全依赖注意力机制来捕捉输入和输出之间全局依赖的模型架构。Transformer 允许显著更多的并行化，并且在仅用八块 P100 GPU 训练十二小时后就能达到翻译质量的新最优水平。 
 %\marginpar{you removed the constant number of repetitions part. I wrote it because I wanted to make it clear that the model does not only perform attention once, while it's also not recurrent. I thought that might be important to get across early.}
 
 % Just a standard paragraph with citations, rewrite.

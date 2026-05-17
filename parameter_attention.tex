@@ -1,27 +1,27 @@
 \pagebreak
-\section*{Two Feed-Forward Layers = Attention over Parameters}\label{sec:parameter_attention}
+\section*{两个前馈层 = 对参数的注意力}\label{sec:parameter_attention}
 
-In addition to attention layers, our model contains position-wise feed-forward networks (Section \ref{sec:ffn}), which consist of two linear transformations with a ReLU activation in between.  In fact, these networks too can be seen as a form of attention.  Compare the formula for such a network with the formula for a simple dot-product attention layer (biases and scaling factors omitted):
+除了注意力层外，我们的模型还包含逐位置前馈网络（第 \ref{sec:ffn} 节），由两个线性变换组成，中间有一个 ReLU 激活。实际上，这些网络也可以看作是注意力的一种形式。将这样一个网络的公式与简单的点积注意力层的公式进行比较（省略偏置和缩放因子）：
 
 \begin{align*}
     FFN(x, W_1, W_2) = ReLU(xW_1)W_2 \\
     A(q, K, V) = Softmax(qK^T)V
 \end{align*}
 
-Based on the similarity of these formulae, the two-layer feed-forward network can be seen as a kind of attention, where the keys and values are the rows of the trainable parameter matrices $W_1$ and $W_2$, and where we use ReLU instead of Softmax in the compatibility function.
+基于这些公式的相似性，两层前馈网络可以看作是一种注意力，其中键和值是可训练参数矩阵 $W_1$ 和 $W_2$ 的行，且我们在兼容性函数中使用 ReLU 而不是 Softmax。
 
 %the compatablity function is $compat(q, k_i) = ReLU(q \cdot k_i)$ instead of $Softmax(qK_T)_i$.
 
-Given this similarity, we experimented with replacing the position-wise feed-forward networks with attention layers similar to the ones we use everywhere else our model. The multi-head-attention-over-parameters sublayer is identical to the multi-head attention described in \ref{sec:multihead}, except that the "keys" and "values" inputs to each attention head are trainable model parameters, as opposed to being linear projections of a previous layer.  These parameters are scaled up by a factor of $\sqrt{d_{model}}$ in order to be more similar to activations.
+基于这种相似性，我们尝试用类似于模型其他地方使用的注意力层来替换逐位置前馈网络。多头参数注意力子层与第 \ref{sec:multihead} 节所述的多头注意力相同，除了每个注意力头的"键"和"值"输入是可训练的模型参数，而不是前一层的线性投影。这些参数按 $\sqrt{d_{model}}$ 的因子进行缩放，以更接近激活。
 
-In our first experiment, we replaced each position-wise feed-forward network with a multi-head-attention-over-parameters sublayer with $h_p=8$ heads, key-dimensionality $d_{pk}=64$, and value-dimensionality $d_{pv}=64$, using $n_p=1536$ key-value pairs for each attention head.  The sublayer has a total of $2097152$ parameters, including the parameters in the query projection and the output projection.  This matches the number of parameters in the position-wise feed-forward network that we replaced.  While the theoretical amount of computation is also the same, in practice, the attention version caused the step times to be about 30\% longer.
+在我们的第一个实验中，我们用一个多头参数注意力子层替换了每个逐位置前馈网络，该子层有 $h_p=8$ 个头、键维度 $d_{pk}=64$ 和值维度 $d_{pv}=64$，每个注意力头使用 $n_p=1536$ 个键值对。该子层总共有 $2097152$ 个参数，包括查询投影和输出投影中的参数。这与我们替换的逐位置前馈网络中的参数数量相匹配。虽然理论计算量相同，但实际上注意力版本的步骤时间增加了约 30\%。
 
-In our second experiment, we used $h_p=8$ heads, and $n_p=512$ key-value pairs for each attention head, again matching the total number of parameters in the base model.
+在我们的第二个实验中，我们使用了 $h_p=8$ 个头和每个注意力头 $n_p=512$ 个键值对，同样与基础模型中的参数总数相匹配。
 
-Results for the first experiment were slightly worse than for the base model, and results for the second experiment were slightly better, see Table~\ref{tab:parameter_attention}.
+第一个实验的结果略差于基础模型，第二个实验的结果略好，见表 \ref{tab:parameter_attention}。
 
 \begin{table}[h]
-\caption{Replacing the position-wise feed-forward networks with multihead-attention-over-parameters produces similar results to the base model.  All metrics are on the English-to-German translation development set, newstest2013.}
+\caption{用多头参数注意力替换逐位置前馈网络会产生与基础模型类似的结果。所有指标都在英-德翻译开发集 newstest2013 上。}
 \label{tab:parameter_attention}
 \begin{center}
 \vspace{-2mm}

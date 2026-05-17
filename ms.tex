@@ -85,7 +85,7 @@
 %\newcommand{\Wvm}{{W_m}_v}
 \newcommand\concat[3]{\left[#1 \parallel_#3 #2\right]}
 
-\title{Attention Is All You Need}
+\title{注意力机制就是一切}
 
 % The \author macro works with any number of authors. There are two
 % commands used to separate the names and addresses of multiple
@@ -98,8 +98,7 @@
 % author name.
 \author{
   \AND
-  Ashish Vaswani\thanks{Equal contribution. Listing order is random. Jakob proposed replacing RNNs with self-attention and started the effort to evaluate this idea.
-Ashish, with Illia, designed and implemented the first Transformer models and has been crucially involved in every aspect of this work. Noam proposed scaled dot-product attention, multi-head attention and the parameter-free position representation and became the other person involved in nearly every detail. Niki designed, implemented, tuned and evaluated countless model variants in our original codebase and tensor2tensor. Llion also experimented with novel model variants, was responsible for our initial codebase, and efficient inference and visualizations. Lukasz and Aidan spent countless long days designing various parts of and implementing tensor2tensor, replacing our earlier codebase, greatly improving results and massively accelerating our research.
+  Ashish Vaswani\thanks{同等贡献。排列顺序随机。Jakob 提出用自注意力替代 RNN，并开始评估这个想法的工作。Ashish 与 Illia 一起设计和实现了第一个 Transformer 模型，并在这项工作的各个方面都至关重要。Noam 提出了缩放点积注意力、多头注意力和无参数位置表示，并成为参与几乎所有细节的另一个关键人物。Niki 在我们的原始代码库和 tensor2tensor 中设计、实现、调整和评估了无数模型变体。Llion 也尝试了新的模型变体，负责我们的初始代码库、高效推理和可视化。Lukasz 和 Aidan 花费无数个长时间设计和实现 tensor2tensor 的各个部分，替换了我们早期的代码库，大大改进了结果并加速了我们的研究。
 }\\
   Google Brain\\
   \texttt{avaswani@google.com}\\
@@ -120,7 +119,7 @@ Ashish, with Illia, designed and implemented the first Transformer models and ha
   Google Research\\
   \texttt{llion@google.com}\\   
   \And
-  Aidan N. Gomez\footnotemark[1] \hspace{1.7mm}\thanks{Work performed while at Google Brain.}\\
+  Aidan N. Gomez\footnotemark[1] \hspace{1.7mm}\thanks{工作在 Google Brain 期间完成。}\\
   University of Toronto\\
   \texttt{aidan@cs.toronto.edu}
   \And
@@ -128,7 +127,7 @@ Ashish, with Illia, designed and implemented the first Transformer models and ha
   Google Brain\\
   \texttt{lukaszkaiser@google.com}\\
   \And
-  Illia Polosukhin\footnotemark[1]\hspace{1.7mm} \thanks{Work performed while at Google Research.}\\
+  Illia Polosukhin\footnotemark[1]\hspace{1.7mm} \thanks{工作在 Google Research 期间完成。}\\
   \texttt{illia.polosukhin@gmail.com}\\  
 }
 
@@ -136,7 +135,7 @@ Ashish, with Illia, designed and implemented the first Transformer models and ha
 \maketitle
 
 \begin{abstract}
-The dominant sequence transduction models are based on complex recurrent or convolutional neural networks that include an encoder and a decoder. The best performing models also connect the encoder and decoder through an attention mechanism. We propose a new simple network architecture, the Transformer, based solely on attention mechanisms, dispensing with recurrence and convolutions entirely. Experiments on two machine translation tasks show these models to be superior in quality while being  more parallelizable and requiring significantly less time to train. Our model achieves 28.4 BLEU on the WMT 2014 English-to-German translation task, improving over the existing best results, including ensembles, by over 2 BLEU.  On the WMT 2014 English-to-French translation task, our model establishes a new single-model state-of-the-art BLEU score of 41.8 after training for 3.5 days on eight GPUs, a small fraction of the training costs of the best models from the literature. We show that the Transformer generalizes well to other tasks by applying it successfully to English constituency parsing  both with large and limited training data.
+目前主流的序列转导模型基于复杂的循环神经网络或卷积神经网络，包括编码器和解码器。性能最好的模型还通过注意力机制连接编码器和解码器。我们提出了一种新的简单网络架构 Transformer，完全基于注意力机制，完全摒弃了循环和卷积。在两个机器翻译任务上的实验表明，这些模型在质量上更优，同时具有更好的并行性，需要更少的训练时间。我们的模型在 WMT 2014 英德翻译任务上取得 28.4 BLEU，比现有最佳成果（包括集合模型）提高了 2 BLEU 以上。在 WMT 2014 英法翻译任务上，我们的模型在八块 GPU 上训练 3.5 天后，在单模型上达到了 41.8 的 BLEU 最优水平，相比现有文献中最佳模型的训练成本仅为其很小的一部分。我们证明了 Transformer 对其他任务具有很好的泛化能力，通过在英语成分句法分析任务上的成功应用进行了验证，包括使用大规模和有限训练数据的情况。
 % \blfootnote{Code available at \url{https://github.com/tensorflow/tensor2tensor}}
 
 %TODO(noam): update results for new models.
@@ -154,38 +153,36 @@ The dominant sequence transduction models are based on complex recurrent or conv
 %Another selling point is the increased interpretability as %shown with the visualizations. Which comes from the %simplicity and use of only attentions.
 \end{abstract}
 
-\section{Introduction}
+\section{介绍}
 
 \input{introduction}
 
-\section{Background}
+\section{背景}
 
 \input{background}
 
-\section{Model Architecture}
+\section{模型架构}
 \input{model_architecture}
  
-\section{Why Self-Attention}
+\section{为什么使用自注意力}
 \input{why_self_attention}
 
-\section{Training}
+\section{训练}
 \input{training}
  
-\section{Results} \label{sec:results}
+\section{实验结果} \label{sec:results}
 \input{results}
 
-\section{Conclusion}
-In this work, we presented the Transformer, the first sequence transduction model based entirely on attention, replacing the recurrent layers most commonly used in encoder-decoder architectures with multi-headed self-attention.
+\section{结论}
+在本工作中，我们提出了 Transformer，这是第一个完全基于注意力的序列转导模型，用多头自注意力替代了编码器-解码器架构中最常用的循环层。
 
-For translation tasks, the Transformer can be trained significantly faster than architectures based on recurrent or convolutional layers. On both WMT 2014 English-to-German and WMT 2014 English-to-French translation tasks, we achieve a new state of the art. In the former task our best model outperforms even all previously reported ensembles. %We also provide an indication of the broader applicability of our models through experiments on English constituency parsing.
+对于翻译任务，Transformer 的训练速度明显快于基于循环或卷积层的架构。在 WMT 2014 英德翻译和 WMT 2014 英法翻译任务上，我们都达到了新的最先进水平。在前一个任务上，我们的最佳模型甚至超过了之前报告的所有集合模型。
 
-We are excited about the future of attention-based models and plan to apply them to other tasks. We plan to extend the Transformer to problems involving input and output modalities other than text and to investigate local, restricted attention mechanisms to efficiently handle large inputs and outputs such as images, audio and video.
-Making generation less sequential is another research goals of ours.
+我们对基于注意力的模型的未来充满期待，计划将其应用于其他任务。我们计划将 Transformer 扩展到涉及非文本输入输出模态的问题，并研究局部的、受限的注意力机制，以有效处理大型输入和输出（如图像、音频和视频）。使生成过程不那么顺序化是我们的另一个研究目标。
 
-The code we used to train and evaluate our models is available at \url{https://github.com/tensorflow/tensor2tensor}.
+我们用于训练和评估模型的代码可在 \url{https://github.com/tensorflow/tensor2tensor} 获取。
 
-\paragraph{Acknowledgements} We are grateful to Nal Kalchbrenner and Stephan Gouws for
-their fruitful comments, corrections and inspiration.
+\paragraph{致谢} 我们感谢 Nal Kalchbrenner 和 Stephan Gouws 提供的富有成果的评论、更正和启发。
 
 \bibliographystyle{plain}
 %\bibliography{deeplearn}

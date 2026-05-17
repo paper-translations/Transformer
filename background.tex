@@ -1,11 +1,11 @@
-The goal of reducing sequential computation also forms the foundation of the Extended Neural GPU \citep{extendedngpu}, ByteNet \citep{NalBytenet2017} and ConvS2S \citep{JonasFaceNet2017}, all of which use convolutional neural networks as basic building block, computing hidden representations in parallel for all input and output positions. In these models, the number of operations required to relate signals from two arbitrary input or output positions grows in the distance between positions, linearly for ConvS2S and logarithmically for ByteNet. This makes it more difficult to learn dependencies between distant positions \citep{hochreiter2001gradient}. In the Transformer this is reduced to a constant number of operations, albeit at the cost of reduced effective resolution due to averaging attention-weighted positions, an effect we counteract with Multi-Head Attention as described in section~\ref{sec:attention}. 
+减少顺序计算的目标也构成了 Extended Neural GPU \citep{extendedngpu}、ByteNet \citep{NalBytenet2017} 和 ConvS2S \citep{JonasFaceNet2017} 的基础，它们都使用卷积神经网络作为基本构建块，并行计算所有输入和输出位置的隐表征。在这些模型中，关联两个任意输入或输出位置的信号所需的操作数随位置之间的距离增长，ConvS2S 线性增长，ByteNet 对数增长。这使得学习距离较远位置之间的依赖变得更加困难 \citep{hochreiter2001gradient}。在 Transformer 中，这被减少为常数个操作，尽管代价是由于平均注意力加权位置导致的有效分辨率降低，这是一个我们用多头注意力来抵消的效果，如第~\ref{sec:attention} 节所描述。 
 
-Self-attention, sometimes called intra-attention is an attention mechanism relating different positions of a single sequence in order to compute a representation of the sequence. Self-attention has been used successfully in a variety of tasks including reading comprehension, abstractive summarization, textual entailment and learning task-independent sentence representations \citep{cheng2016long, decomposableAttnModel, paulus2017deep, lin2017structured}.
+自注意力，有时称为内部注意力，是一种关联单个序列的不同位置以计算序列表征的注意力机制。自注意力已在多种任务中成功应用，包括阅读理解、抽象摘要、文本蕴含和学习任务独立的句子表征 \citep{cheng2016long, decomposableAttnModel, paulus2017deep, lin2017structured}。
 
-End-to-end memory networks are based on a recurrent attention mechanism instead of sequence-aligned recurrence and have been shown to perform well on simple-language question answering and language modeling tasks \citep{sukhbaatar2015}.
+端到端记忆网络基于循环注意力机制而非序列对齐的循环，已被证明在简单语言问答和语言建模任务上表现良好 \citep{sukhbaatar2015}。
 
-To the best of our knowledge, however, the Transformer is the first transduction model relying entirely on self-attention to compute representations of its input and output without using sequence-aligned RNNs or convolution.
-In the following sections, we will describe the Transformer, motivate self-attention and discuss its advantages over models such as \citep{neural_gpu, NalBytenet2017} and \citep{JonasFaceNet2017}.
+然而，据我们所知，Transformer 是第一个完全依赖自注意力来计算其输入和输出表征，而不使用序列对齐 RNN 或卷积的转导模型。
+在以下章节中，我们将描述 Transformer，论证自注意力的必要性，并讨论其相对于诸如 \citep{neural_gpu, NalBytenet2017} 和 \citep{JonasFaceNet2017} 等模型的优势。
 
 
 %\citep{JonasFaceNet2017} report new SOTA on machine translation for English-to-German (EnDe), Enlish-to-French (EnFr) and English-to-Romanian language pairs. 

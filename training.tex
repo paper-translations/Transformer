@@ -1,15 +1,15 @@
-This section describes the training regime for our models. 
+本节描述我们模型的训练方案。 
 
 %In order to speed up experimentation, our ablations are performed relative to a smaller base model described in detail in Section \ref{sec:results}.
 
-\subsection{Training Data and Batching}
-We trained on the standard WMT 2014 English-German dataset consisting of about 4.5 million sentence pairs.  Sentences were encoded using byte-pair encoding \citep{DBLP:journals/corr/BritzGLL17}, which has a shared source-target vocabulary of about 37000 tokens. For English-French, we used the significantly larger WMT 2014 English-French dataset consisting of 36M sentences and split tokens into a 32000 word-piece vocabulary \citep{wu2016google}.  Sentence pairs were batched together by approximate sequence length.  Each training batch contained a set of sentence pairs containing approximately 25000 source tokens and 25000 target tokens.  
+\subsection{训练数据和批处理}
+我们在标准 WMT 2014 英-德数据集上进行训练，该数据集包含约 450 万个句子对。句子使用字节对编码进行编码 \citep{DBLP:journals/corr/BritzGLL17}，其共享源-目标词汇量约为 37000 个 token。对于英-法翻译，我们使用了更大的 WMT 2014 英-法数据集，包含 3600 万个句子，并将 token 分割为 32000 个词片段词汇 \citep{wu2016google}。句子对按近似序列长度分组批处理。每个训练批次包含一组句子对，约包含 25000 个源 token 和 25000 个目标 token。  
 
-\subsection{Hardware and Schedule}
+\subsection{硬件和训练计划}
 
-We trained our models on one machine with 8 NVIDIA P100 GPUs.  For our base models using the hyperparameters described throughout the paper, each training step took about 0.4 seconds.  We trained the base models for a total of 100,000 steps or 12 hours.  For our big models,(described on the bottom line of table \ref{tab:variations}), step time was 1.0 seconds.  The big models were trained for 300,000 steps (3.5 days).
+我们在配备 8 块 NVIDIA P100 GPU 的单台机器上训练模型。对于使用本文所述超参数的基础模型，每个训练步骤耗时约 0.4 秒。我们训练基础模型共 100,000 步，耗时 12 小时。对于大型模型（如表 \ref{tab:variations} 底部所示），每步耗时为 1.0 秒。大型模型训练了 300,000 步（3.5 天）。
 
-\subsection{Optimizer} We used the Adam optimizer~\citep{kingma2014adam} with $\beta_1=0.9$, $\beta_2=0.98$ and $\epsilon=10^{-9}$.  We varied the learning rate over the course of training, according to the formula:
+\subsection{优化器} 我们使用 Adam 优化器 ~\citep{kingma2014adam}，参数为 $\beta_1=0.9$、$\beta_2=0.98$ 和 $\epsilon=10^{-9}$。我们在训练过程中改变学习率，按照以下公式进行：
 
 \begin{equation}
 lrate = \dmodel^{-0.5} \cdot
@@ -17,12 +17,12 @@ lrate = \dmodel^{-0.5} \cdot
     {step\_num} \cdot {warmup\_steps}^{-1.5})
 \end{equation}
 
-This corresponds to increasing the learning rate linearly for the first $warmup\_steps$ training steps, and decreasing it thereafter proportionally to the inverse square root of the step number.  We used $warmup\_steps=4000$.
+这对应于在前 $warmup\_steps$ 个训练步骤中线性增加学习率，之后按步骤数的反平方根比例减少。我们使用 $warmup\_steps=4000$。
 
-\subsection{Regularization} \label{sec:reg}
+\subsection{正则化} \label{sec:reg}
 
-We employ three types of regularization during training: 
-\paragraph{Residual Dropout} We apply dropout \citep{srivastava2014dropout} to the output of each sub-layer, before it is added to the sub-layer input and normalized.   In addition, we apply dropout to the sums of the embeddings and the positional encodings in both the encoder and decoder stacks.  For the base model, we use a rate of $P_{drop}=0.1$.
+我们在训练过程中采用三种类型的正则化： 
+\paragraph{残差 Dropout} 我们对每个子层的输出应用 dropout \citep{srivastava2014dropout}，在它被加到子层输入并进行归一化之前。此外，我们对编码器和解码器堆栈中的嵌入和位置编码之和应用 dropout。对于基础模型，我们使用 $P_{drop}=0.1$ 的比率。
 
 % \paragraph{Attention Dropout} Query to key attentions are structurally similar to hidden-to-hidden weights in a feed-forward network, albeit across positions. The softmax activations yielding attention weights can then be seen as the analogue of hidden layer activations. A natural possibility is to extend dropout \citep{srivastava2014dropout} to attention. We implement attention dropout by dropping out attention weights as,
 % \begin{equation*}
@@ -39,4 +39,4 @@ We employ three types of regularization during training:
 %As a result, the query will not be able to access the memory values at the dropped out position. In our experiments, we tried attention dropout rates of 0.2, and 0.3, and found it to work favorably for English-to-German translation.
 %$attention\_dropout\_rate=0.2$.
 
-\paragraph{Label Smoothing} During training, we employed label smoothing of value $\epsilon_{ls}=0.1$ \citep{DBLP:journals/corr/SzegedyVISW15}.  This hurts perplexity, as the model learns to be more unsure, but improves accuracy and BLEU score.
+\paragraph{标签平滑} 在训练过程中，我们使用 $\epsilon_{ls}=0.1$ 的标签平滑 \citep{DBLP:journals/corr/SzegedyVISW15}。这会降低困惑度，因为模型学会变得更不确定，但提高了准确性和 BLEU 分数。
