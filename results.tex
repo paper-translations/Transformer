@@ -101,9 +101,9 @@ big & 6 & 1024 & 4096 & 16 & & & 0.3 & & 300K & \textbf{4.33} & \textbf{26.4} & 
 
 为了评估 Transformer 不同组件的重要性，我们以不同的方式改变基础模型，测量英-德翻译在开发集 newstest2013 上的性能变化。我们使用了前一部分所述的束搜索，但不使用检查点平均。我们在表 \ref{tab:variations} 中呈现了这些结果。  
 
-在表 \ref{tab:variations} 的 (A) 行中，我们改变注意力头的数量和注意力键与值的维度，保持计算量不变，如第 \ref{sec:multihead} 节所述。虽然单头注意力比最佳设置差 0.9 个 BLEU 分数，但质量也会随着头数过多而下降。
+在表 \ref{tab:variations} 的 (A) 行中，我们改变注意力头的数量和注意力 key 与 value 的维度，保持计算量不变，如第 \ref{sec:multihead} 节所述。虽然单头注意力比最佳设置差 0.9 个 BLEU 分数，但质量也会随着头数过多而下降。
 
-在表 \ref{tab:variations} 的 (B) 行中，我们观察到减少注意力键大小 $d_k$ 会降低模型质量。这表明确定兼容性并不容易，更复杂的兼容性函数可能比点积更有益。我们进一步在 (C) 和 (D) 行观察到，如预期的那样，更大的模型更好，dropout 在避免过拟合方面非常有帮助。在 (E) 行中，我们用学习的位置嵌入替换了我们的正弦位置编码 \citep{JonasFaceNet2017}，观察到与基础模型几乎相同的结果。
+在表 \ref{tab:variations} 的 (B) 行中，我们观察到减少注意力 key 大小 $d_k$ 会降低模型质量。这表明确定兼容性并不容易，更复杂的兼容性函数可能比点积更有益。我们进一步在 (C) 和 (D) 行观察到，如预期的那样，更大的模型更好，dropout 在避免过拟合方面非常有帮助。在 (E) 行中，我们用学习的位置嵌入替换了我们的正弦位置编码 \citep{JonasFaceNet2017}，观察到与基础模型几乎相同的结果。
 
 %To evaluate the importance of different components of the Transformer, we use our base model to ablate on a single hyperparameter at each time and measure the change in performance on English$\to$German translation. Our variations in Table~\ref{tab:variations} show that the number of attention layers and attention heads is the most important architecture hyperparamter However, the we do not see performance gains beyond 6 layers, suggesting that we either don't have enough data to train a large model or we need to turn up regularization. We leave this exploration for future work. Among our regularizers, attention dropout has the most significant impact on performance.
 
